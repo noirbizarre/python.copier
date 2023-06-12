@@ -1,0 +1,16 @@
+# Changes here will be overwritten by Copier
+_commit: '99.99.99'
+_src_path: .
+author_email: john.doe@local.dev
+author_fullname: John Doe
+author_username: john-doe
+copyright_license: MIT License
+project_description: A test project
+project_name: Test Project
+project_slug: test-project
+python_distribution: test-project
+python_package: test_project
+repository_name: test-project
+repository_namespace: john-doe
+repository_provider: github.com
+

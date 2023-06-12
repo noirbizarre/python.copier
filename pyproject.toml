@@ -1,0 +1,43 @@
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Axel Haustant", email = "noirbizarre@users.noreply.github.com"},
+]
+dependencies = [
+    "copier>=7.2.0",
+    "copier-templates-extensions>=0.3.0",
+]
+license = {text = "MIT"}
+requires-python = ">=3.8,<4.0"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "plumbum>=1.8.2",
+    "pytest>=7.3.1",
+    "pytest-sugar>=0.9.7",
+    "dir-content-diff>=1.5.0",
+    "pytest-datadir>=1.4.1",
+]
+
+
+[tool.pdm.scripts]
+test.help = "Run the test suite"
+test.cmd = "pytest"
+
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+norecursedirs = ".git build dist data"
+testpaths = [
+  "tests/",
+]
+
+
+[tool.commitizen]
+name = "emotional"
+github = "noirbizarre/python.copier"
+order_by_scope = true
+version_provider = "scm"

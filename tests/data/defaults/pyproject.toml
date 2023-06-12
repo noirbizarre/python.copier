@@ -1,0 +1,193 @@
+[project]
+name = "test-project"
+description = "A test project"
+authors = [
+    {name = "John Doe", email = "john.doe@local.dev"},
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.7"
+keywords = []
+dynamic = ["version"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Typing :: Typed",
+]
+
+dependencies = []
+[project.optional-dependencies]
+
+[project.urls]
+Homepage = "https://github.com/john-doe/test-project"
+Documentation = "https://test-project.rtfd.io"
+Repository = "https://github.com/john-doe/test-project"
+Issues = "https://github.com/john-doe/test-project/issues"
+
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm.version]
+source = "scm"
+write_to = "src/test_project/_version.py"
+write_template = '__version__ = "{}"'
+
+
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest>=7.1.2",
+    "pytest-sugar>=0.9.5",
+    "pytest-cov>=3.0.0",
+]
+lint = [
+    "black>=23.3.0",
+    "mypy>=1.3.0",
+    "ruff>=0.0.270",
+]
+tox = [
+    "tox",
+    "tox-pdm>=0.5",
+]
+doc = [
+    "mkdocs-material>=9.1.5",
+    "mike",
+    "emotional",
+    "mkdocstrings[python]>=0.19.0",
+]
+release = [
+    "emotional",
+]
+
+
+[tool.pdm.scripts]
+test.help = "Run the test suite"
+test.cmd = "pytest"
+
+lint.help = "Lint all tracked files using pre-commit"
+lint.cmd = "pre-commit run --all-files"
+
+format.help = "Format the code according to known rules"
+format.composite = [
+    "codespell --write-changes",
+    "ruff --fix-only --show-fixes src tests",
+    "black src tests",
+]
+
+typing.help = "Full typing linting (includes imported packages and uncommmited files)"
+typing.cmd = "mypy src tests --warn-unused-ignores"
+
+cover.help = "Run the test suite with coverage"
+pre_cover = "coverage erase"
+cover.composite = [
+  """
+  test
+    --cov-report=term
+    --cov=test_project
+    --cov-report=html:reports/coverage
+    --cov-report=xml:reports/coverage.xml
+    --no-cov-on-fail
+    --junitxml=reports/tests.xml
+  """
+]
+
+"cover:tox".help = "Run the test suite against all supported Python version"
+"pre_cover:tox" = "coverage erase"
+"cover:tox".composite = [
+  "echo '🚦 Tests'",
+  "tox -p",
+  "echo '\n📸 Coverage'",
+  "coverage report",
+  "coverage xml -o reports/tox/coverage.xml",
+  "coverage html -d reports/tox/coverage",
+]
+
+doc.help = "Generate the documentation site."
+doc.cmd = "mkdocs build"
+
+"doc:serve".help = "Generate the documentation site (live reload)."
+"doc:serve".cmd = "mkdocs serve"
+
+"doc:deploy".help = "Deploy a versioned documentation using mike"
+"doc:deploy".cmd = "mike deploy"
+
+changelog.help = "Update the changelog"
+changelog.cmd = "cz changelog"
+
+
+[tool.commitizen]
+name = "emotional"
+github = "john-doe/test-project"
+order_by_scope = true
+version_provider = "scm"
+
+
+[tool.pdm.ide]
+linters = ["ruff"]
+formatter = "black"
+testing = "pytest"
+
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+norecursedirs = ".git build dist"
+testpaths = [
+  "src/",
+  "tests/",
+]
+
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+omit = [
+  "tests/*",
+]
+
+
+[tool.black]
+# Black adds 10% tolernace which makes it to 110
+# See:
+#  https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#line-length
+line-length = 100
+
+
+[tool.ruff]
+line-length = 110
+respect-gitignore = true
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # McCabe # fake8-comprehension
+    "C",
+    # Pyupgrade
+    "UP",
+    # isort
+    "I001"
+]
+src = ["src", "tests"]
+
+[tool.ruff.isort]
+known-first-party = ["test_project"]
+known-third-party = ["pytest"]
+
+
+[tool.mypy]
+exclude = [
+  "docs",
+  "build",
+  "dist",
+]

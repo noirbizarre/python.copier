@@ -1,0 +1,93 @@
+# CONFIGURATION -------------------------
+_min_copier_version: "8"
+_envops:
+  autoescape: false
+  keep_trailing_newline: true
+_subdirectory: template
+_templates_suffix: .jinja
+_skip_if_exists:
+  - CHANGELOG.md
+  
+_jinja_extensions:
+  - copier_templates_extensions.TemplateExtensionLoader
+  - extensions/slugify.py:Slugify
+  - extensions/context.py:ContextUpdater
+
+_tasks:
+  - git init
+  - pdm install
+  - pre-commit install --install-hooks
+  - git add .
+
+# PROMPT --------------------------------
+project_name:
+  type: str
+  help: Your project name
+
+project_description:
+  type: str
+  help: Your project description
+
+project_slug:
+  type: str
+  help: Your project slug (short name wihtout whitespaces)
+  default: "{{ project_name | slugify }}"
+
+author_fullname:
+  type: str
+  help: Your full name
+
+author_email:
+  type: str
+  help: Your email
+
+author_username:
+  type: str
+  help: Your username (e.g. on GitHub)
+
+repository_provider:
+  type: str
+  help: Your repository provider
+  default: github.com
+  choices:
+    - github.com
+    - gitlab.com
+
+repository_namespace:
+  type: str
+  help: Your repository namespace
+  default: "{{ author_username }}"
+
+repository_name:
+  type: str
+  help: Your repository name
+  default: "{{ project_name|lower|replace('_', '-')|replace(' ', '-') }}"
+
+copyright_license:
+  type: str
+  help: Your project's license
+  default: MIT License
+  choices:
+    - Do What The F*ck You Want To Public License
+    - European Union Public License 1.2
+    - GNU Affero General Public License v3.0
+    - GNU General Public License v3.0
+    - GNU Lesser General Public License v3.0
+    - ISC License
+    - MIT License
+    - Mozilla Public License 2.0
+
+python_distribution:
+  type: str
+  help: Your Python package distribution name (for `pip install NAME`)
+  default: "{{ project_slug }}"
+
+python_package:
+  type: str
+  help: Your Python package import name (for `import NAME` in Python code)
+  default: "{{ project_slug | replace('-', '_') }}"
+
+# python_package_command_line_name:
+#   type: str
+#   help: Your CLI name if any (for use in the shell)
+#   default: "{{ project_slug }}"
