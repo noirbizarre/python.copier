@@ -7,17 +7,17 @@ _subdirectory: template
 _templates_suffix: .jinja
 _skip_if_exists:
   - CHANGELOG.md
-  
+
 _jinja_extensions:
   - copier_templates_extensions.TemplateExtensionLoader
   - extensions/slugify.py:Slugify
   - extensions/context.py:ContextUpdater
 
-_tasks:
-  - git init
-  - pdm install
-  - pre-commit install --install-hooks
-  - git add .
+# _tasks:
+#   - git init
+#   - pdm install
+#   - pre-commit install --install-hooks
+#   - git add .
 
 # PROMPT --------------------------------
 project_name:
@@ -30,7 +30,7 @@ project_description:
 
 project_slug:
   type: str
-  help: Your project slug (short name wihtout whitespaces)
+  help: Your project slug (short name without whitespaces)
   default: "{{ project_name | slugify }}"
 
 author_fullname:
@@ -87,7 +87,29 @@ python_package:
   help: Your Python package import name (for `import NAME` in Python code)
   default: "{{ project_slug | replace('-', '_') }}"
 
-# python_package_command_line_name:
-#   type: str
-#   help: Your CLI name if any (for use in the shell)
-#   default: "{{ project_slug }}"
+use_src:
+  type: bool
+  help: Do you want to use a `src` directory for your Python code ?
+  default: true
+
+is_lib:
+  type: bool
+  help: Is your project a reusable library ?
+  default: false
+
+is_cli:
+  type: bool
+  help: Does your project include a CLI ?
+  default: false
+
+cli_name:
+  type: str
+  when: "{{ is_cli }}"
+  help: Your CLI name if any (for use in the shell)
+  default: "{{ project_slug }}"
+
+has_docs:
+  type: bool
+  help: Does your project include documentation ?
+  default: false
+

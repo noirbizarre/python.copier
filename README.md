@@ -27,7 +27,7 @@ pipx inject copier copier-templates-extensions
 
 It also assume the following tools are installed:
 
-- [pdm](https://pdm.fming.dev), optionnaly with [pdm-ide](https://github.com/noirbizarre/pdm-ide)
+- [pdm](https://pdm.fming.dev), optionally with [pdm-ide](https://github.com/noirbizarre/pdm-ide)
 - [pre-commit](https://pre-commit.com)
 
 If you don have them, you can also install them with [`pipx`](https://pypa.github.io/pipx/)

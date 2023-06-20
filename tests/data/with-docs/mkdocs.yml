@@ -94,6 +94,7 @@ watch:
   - src
 
 extra:
+  copyright: Copyright &copy; 2023 John Doe
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/john-doe/test-project

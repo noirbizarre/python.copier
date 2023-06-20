@@ -28,19 +28,26 @@ dependencies = []
 
 [project.urls]
 Homepage = "https://{{ repository_provider }}/{{ repository_namespace }}/{{ repository_name }}"
-Documentation = "https://{{ repository_name }}.rtfd.io"
+Documentation = {% if has_docs -%}
+    "https://{{ repository_name }}.rtfd.io"
+  {%- else -%}
+    "https://{{ repository_provider }}/{{ repository_namespace }}/{{ repository_name }}#readme"
+  {%- endif %}
 Repository = "https://{{ repository_provider }}/{{ repository_namespace }}/{{ repository_name }}"
 Issues = "https://{{ repository_provider }}/{{ repository_namespace }}/{{ repository_name }}/issues"
 
 
+{% if is_lib -%}
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 
+{% endif -%}
+
 [tool.pdm.version]
 source = "scm"
-write_to = "src/{{ python_package }}/_version.py"
+write_to = "{% if use_src %}src/{% endif %}{{ python_package }}/_version.py"
 write_template = '__version__ = "{}"'
 
 
@@ -59,12 +66,14 @@ tox = [
     "tox",
     "tox-pdm>=0.5",
 ]
+{%- if has_docs %}
 doc = [
     "mkdocs-material>=9.1.5",
     "mike",
     "emotional",
     "mkdocstrings[python]>=0.19.0",
 ]
+{%- endif %}
 release = [
     "emotional",
 ]
@@ -92,8 +101,8 @@ pre_cover = "coverage erase"
 cover.composite = [
   """
   test
+    --cov
     --cov-report=term
-    --cov={{ python_package }}
     --cov-report=html:reports/coverage
     --cov-report=xml:reports/coverage.xml
     --no-cov-on-fail
@@ -101,17 +110,11 @@ cover.composite = [
   """
 ]
 
-"cover:tox".help = "Run the test suite against all supported Python version"
-"pre_cover:tox" = "coverage erase"
-"cover:tox".composite = [
-  "echo '🚦 Tests'",
-  "tox -p",
-  "echo '\n📸 Coverage'",
-  "coverage report",
-  "coverage xml -o reports/tox/coverage.xml",
-  "coverage html -d reports/tox/coverage",
-]
+"cover:all".help = "Run the test suite against all supported Python version"
+"pre_cover:all" = "coverage erase"
+"cover:all".cmd = "tox --parallel"
 
+{% if has_docs -%}
 doc.help = "Generate the documentation site."
 doc.cmd = "mkdocs build"
 
@@ -120,6 +123,8 @@ doc.cmd = "mkdocs build"
 
 "doc:deploy".help = "Deploy a versioned documentation using mike"
 "doc:deploy".cmd = "mike deploy"
+
+{% endif -%}
 
 changelog.help = "Update the changelog"
 changelog.cmd = "cz changelog"
@@ -142,17 +147,28 @@ testing = "pytest"
 addopts = "-ra"
 norecursedirs = ".git build dist"
 testpaths = [
-  "src/",
+  {% if use_src %}"src/"{% else %}"{{ python_package }}/"{% endif %},
   "tests/",
 ]
 
 
 [tool.coverage.run]
+{%- if use_src %}
 source = ["src"]
+{%- else %}
+source_pkgs = ["{{ python_package }}"]
+{%- endif %}
 branch = true
 omit = [
   "tests/*",
 ]
+
+[tool.coverage.report]
+exclude_also = [
+  'def __repr__',
+  'if TYPE_CHECKING:',
+]
+ignore_errors = true
 
 
 [tool.black]
@@ -178,7 +194,7 @@ select = [
     # isort
     "I001"
 ]
-src = ["src", "tests"]
+src = [{% if use_src %}"src"{% else %}"."{% endif %}, "tests"]
 
 [tool.ruff.isort]
 known-first-party = ["{{ python_package }}"]

@@ -1,8 +1,8 @@
-site_name: Test Project
-site_author: John Doe
+site_name: {{ project_name }}
+site_author: {{ author_fullname }}
 
-repo_name: john-doe/test-project
-repo_url: https://gitlab.com/john-doe/test-project
+repo_name: {{ repository_namespace }}/{{ repository_name }}
+repo_url: https://{{ repository_provider }}/{{ repository_namespace }}/{{ repository_name }}
 
 
 theme:
@@ -44,10 +44,10 @@ theme:
         name: Switch to system preference
 
 extra_css:
-  - assets/test-project.css
+  - assets/{{ project_slug }}.css
 
 extra_javascript:
-  - assets/test-project.js
+  - assets/{{ project_slug }}.js
 
 plugins:
   - search
@@ -94,8 +94,9 @@ watch:
   - src
 
 extra:
+  copyright: Copyright &copy; {{ now.year }} {{ author_fullname }}
   social:
-    - icon: fontawesome/brands/gitlab
-      link: https://gitlab.com/john-doe/test-project
+    - icon: fontawesome/brands/{{ repository_provider.rstrip(".com") }}
+      link: https://{{ repository_provider }}/{{ repository_namespace }}/{{ repository_name }}
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/test-project
+      link: https://pypi.org/project/{{ python_distribution }}

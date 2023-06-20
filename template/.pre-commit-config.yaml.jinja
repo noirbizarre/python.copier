@@ -25,17 +25,24 @@ repos:
       - id: end-of-file-fixer
         exclude: "tests/data/.+"
       - id: check-yaml
-        exclude: ^(helm/|mkdocs\.yml)
+      {%- if has_docs %}
+        exclude: ^mkdocs\.yml
       - id: check-yaml
         name: Check yaml unsafe
         alias: check-yaml-unsafe
         description: Check yaml with custom constructors
         args: [--unsafe]
         files: mkdocs.yml
+      {%- endif %}
       - id: check-added-large-files
       - id: debug-statements
       - id: check-toml
       - id: detect-private-key
+
+  - repo: https://github.com/pdm-project/pdm
+    rev: 2.7.2
+    hooks:
+      - id: pdm-lock-check
 
   - repo: https://github.com/commitizen-tools/commitizen
     rev: 3.2.2
@@ -43,12 +50,6 @@ repos:
       - id: commitizen
         additional_dependencies:
           - emotional
-      - id: commitizen-branch
-        additional_dependencies:
-          - emotional
-        stages:
-          - post-commit
-          - push
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.23.1
@@ -59,12 +60,16 @@ repos:
       {%- elif repository_provider == "gitlab.com" -%}
       - id: check-gitlab-ci
       {%- endif %}
+      {%- if has_docs %}
       - id: check-readthedocs
+      {%- endif %}
 
+  {%- if false %} {# TODO: supports services #}
   - repo: https://github.com/iamthefij/docker-pre-commit
     rev: v3.0.1
     hooks:
       - id: docker-compose-check
+  {%- endif %}
 
   - repo: https://github.com/psf/black
     rev: 23.3.0
