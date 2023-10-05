@@ -31,12 +31,12 @@ repos:
       - id: detect-private-key
 
   - repo: https://github.com/pdm-project/pdm
-    rev: 2.7.2
+    rev: 2.9.3
     hooks:
       - id: pdm-lock-check
 
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: 3.2.2
+    rev: 3.10.0
     hooks:
       - id: commitizen
         additional_dependencies:
@@ -49,29 +49,29 @@ repos:
           - push
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.23.1
+    rev: 0.27.0
     hooks:
       - id: check-github-workflows
       - id: check-dependabot
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.270
+    rev: v0.0.292
     hooks:
       - id: ruff
 
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 23.9.1
     hooks:
       - id: black
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.3.0
+    rev: v1.5.1
     hooks:
       - id: mypy
         exclude: (template|tests/data)/.*\.pyi?$
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.4
+    rev: v2.2.6
     hooks:
     - id: codespell
       additional_dependencies:

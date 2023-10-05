@@ -118,6 +118,7 @@ name = "emotional"
 github = "john-doe/test-project"
 order_by_scope = true
 version_provider = "scm"
+major_version_zero = true  # Remove this line for the first 1.x release
 
 
 [tool.pdm.ide]

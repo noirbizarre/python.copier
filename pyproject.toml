@@ -7,7 +7,7 @@ authors = [
     {name = "Axel Haustant", email = "noirbizarre@users.noreply.github.com"},
 ]
 dependencies = [
-    "copier>=7.2.0",
+    "copier>=8.0",
     "copier-templates-extensions>=0.3.0",
     "pytest-freezer>=0.4.7",
 ]
@@ -19,12 +19,12 @@ dev = [
     "plumbum>=1.8.2",
     "pytest>=7.3.1",
     "pytest-sugar>=0.9.7",
-    "dir-content-diff>=1.5.0",
     "pytest-datadir>=1.4.1",
     "pre-commit>=3.3.3",
     "commitizen>=3.3.0",
-    "icdiff>=2.0.6",
-    "pytest-gitconfig>=0.1.1",
+    "-e file:///${PROJECT_ROOT}/../../pytest-gitconfig#egg=pytest-gitconfig",
+    "-e file:///${PROJECT_ROOT}/../../pytest-dir-equal#egg=pytest-dir-equal",
+    "-e file:///${PROJECT_ROOT}/../../pytest-copier#egg=pytest-copier",
 ]
 
 

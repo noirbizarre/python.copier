@@ -9,16 +9,17 @@ on:
       - main
     paths-ignore:
       - "*.md"
+  workflow_dispatch:
 
 jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: pdm-project/setup-pdm@main
+      - uses: pdm-project/setup-pdm@v3
 
       - name: Install dependencies
         run: pdm sync -d
 
       - name: Run Tests
-        run: pdm test -v --force-sugar --color=yes
+        run: pdm test -svv --force-sugar --color=yes

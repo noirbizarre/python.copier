@@ -26,10 +26,18 @@ CASES: dict[str, dict[str, Any]] = {
     "name,data", [pytest.param(name, data, id=name) for name, data in CASES.items()]
 )
 def test_apply(
-    copier: CopierHelper, shared_datadir: Path, data: dict[str, Any], name: str, freezer: FrozenDateTimeFactory
+    copier: CopierHelper,
+    shared_datadir: Path,
+    data: dict[str, Any],
+    name: str,
+    freezer: FrozenDateTimeFactory,
 ):
     freezer.move_to(TEST_DATE)
-    copier.copy(**data)
-    copier.assert_answers(shared_datadir / name)
-    copier.assert_dst_equal(shared_datadir / name)
-    copier.assert_pdm_scripts("test", "lint", "doc")
+    project = copier.copy(**data)
+    project.assert_answers(shared_datadir / name)
+    project.assert_equal(
+        shared_datadir / name, ignore=["pdm.lock", ".pdm-build", "*.egg-info"]
+    )
+    assert (project.path / "pdm.lock").exists()
+    project.run("pdm test")
+    project.run("pdm lint")

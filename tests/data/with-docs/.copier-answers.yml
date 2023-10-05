@@ -8,6 +8,7 @@ copyright_license: MIT License
 has_docs: True
 is_cli: False
 is_lib: False
+is_private: False
 project_description: A test project
 project_name: Test Project
 project_slug: test-project
