@@ -1,30 +1,31 @@
-
 [project]
-name = ""
-version = ""
-description = ""
+name = "python.copier"
+description = "My Copier template for Python projects"
 authors = [
     {name = "Axel Haustant", email = "noirbizarre@users.noreply.github.com"},
 ]
 dependencies = [
-    "copier>=8.0",
+    "copier>=9.1.0",
     "copier-templates-extensions>=0.3.0",
-    "pytest-freezer>=0.4.7",
 ]
-license = {text = "MIT"}
 requires-python = ">=3.8,<4.0"
+license = {text = "MIT"}
+dynamic = ["version"]
+
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "plumbum>=1.8.2",
-    "pytest>=7.3.1",
+    "pytest>=7.3.2",
     "pytest-sugar>=0.9.7",
     "pytest-datadir>=1.4.1",
-    "pre-commit>=3.3.3",
-    "commitizen>=3.3.0",
-    "-e file:///${PROJECT_ROOT}/../../pytest-gitconfig#egg=pytest-gitconfig",
-    "-e file:///${PROJECT_ROOT}/../../pytest-dir-equal#egg=pytest-dir-equal",
-    "-e file:///${PROJECT_ROOT}/../../pytest-copier#egg=pytest-copier",
+    "pytest-freezer>=0.4.7",
+    "pytest-copier>=0.3.0",
+    "emotional",
 ]
 
 
@@ -52,3 +53,36 @@ name = "emotional"
 github = "noirbizarre/python.copier"
 order_by_scope = true
 version_provider = "scm"
+
+
+[tool.black]
+# Black adds 10% tolernace which makes it to 110
+# See:
+#  https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#line-length
+line-length = 100
+
+
+[tool.ruff]
+line-length = 110
+respect-gitignore = true
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # McCabe # fake8-comprehension
+    "C",
+    # Pyupgrade
+    "UP",
+    # isort
+    "I001"
+]
+src = [".", "tests"]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.isort]
+known-third-party = ["pytest", "pytest_dir_equal", "pytest_copier"]
+lines-between-types = 1
