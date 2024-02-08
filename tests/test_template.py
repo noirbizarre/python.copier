@@ -38,10 +38,12 @@ CASES: dict[str, dict[str, Any]] = {
 def test_apply(
     copier: CopierFixture,
     shared_datadir: Path,
+    tmp_path: Path,
     data: dict[str, Any],
     name: str,
 ):
-    project = copier.copy(**data)
+    project_path = tmp_path / "project"
+    project = copier.copy(project_path, **data)
     project.assert_answers(shared_datadir / name)
     project.assert_equal(shared_datadir / name, ignore=IGNORED)
 

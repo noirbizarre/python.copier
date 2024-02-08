@@ -1,4 +1,4 @@
-name: CI
+name: 🚦 CI
 
 on:
   pull_request:
@@ -13,9 +13,10 @@ on:
 
 jobs:
   tests:
+    name: 🧪 Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: pdm-project/setup-pdm@v3
 
       - name: Install dependencies
